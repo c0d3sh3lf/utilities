@@ -15,15 +15,12 @@ ip_re = re.compile(r"([0-9]{1,3}.){3}([0-9]{1,3})")
 for ip in inputfile_data:
     if ip_re.match(ip):
         ip_octate = ip.split(".")
-        ip_octate[0] = int(ip_octate[0])
-        ip_octate[0] = str(ip_octate[0])
-        ip_octate[1] = int(ip_octate[1])
-        ip_octate[1] = str(ip_octate[1])
-        ip_octate[2] = int(ip_octate[2])
-        ip_octate[2] = str(ip_octate[2])
-        ip_octate[3] = int(ip_octate[3])
-        ip_octate[3] = str(ip_octate[3])
-        output_data += ip_octate[0] + "." + ip_octate[1] + "." + ip_octate[2] + "." + ip_octate[3] + "\n"
+        for i in range(0, len(ip_octate)):
+            ip_octate[i] = int(ip_octate[i])
+            ip_octate[i] = str(ip_octate[i])
+        new_ip = ip_octate[0] + "." + ip_octate[1] + "." + ip_octate[2] + "." + ip_octate[3]+"\n"
+        output_data += new_ip
+        print "Processed", new_ip
 inputfile.close()
 outputfile = open(inputfilename, "w")
 outputfile.write(output_data)
