@@ -1,3 +1,7 @@
+#!/usr/bin/python
+
+### Calculates hash SHA256 of all files present inside a parent folder and its subfolders.
+
 import hashlib, os, sys
 
 def hash256file(file_obj):
