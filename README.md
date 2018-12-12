@@ -2,6 +2,7 @@
 Small utilities for formatting
 
 * ip_zero_remover.py - Removes prefixed 0 in IP address formats
+* ms17_010_checker.py - Checks for vulnerable systems on given ranges for MS17-010. Requires responder to be installed on the system
 * network_sniffer.py - Script to monitor basic protocols travelling between the source and destination over a network
 * nmap_live_host.py - Discovers live hosts from Nmap XML output
 * nmap_to_csv.py - Converts nmap xml to csv format
