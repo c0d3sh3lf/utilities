@@ -18,12 +18,15 @@ range_file.close()
 
 print "[+] Looking for hosts vulnerable to MS17-010"
 
+log_file = open("ms17_010_session.log", "w")
+
 for range in ranges:
 	try:
 		finger_process = subprocess.Popen(['responder-RunFinger', '-i', range, '-g'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 		result = finger_process.communicate()[0].split('\n')
 		for line in result:
 			if non_error_line.match(line):
+				log_file.write(line + "\n")
 				try:
 					line_split = line.strip()[1:-1].split(",")
 					if (line_split[len(line_split)-1].split(":")[1] == " True"):
@@ -35,7 +38,11 @@ for range in ranges:
 					pass
 	except OSError as e:
 		print "[-] Error. You need to have responder installed to run this tool."
+		log_file.close()
 		sys.exit(1)
 	except KeyboardInterrupt as e:
 		print "[!] Exiting.\a.\a."
+		log_file.close()
 		sys.exit(1)
+
+log_file.close()
