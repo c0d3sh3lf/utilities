@@ -101,7 +101,8 @@ def filter(ruleset = [], filter = ""):
     for rule in ruleset:
         for ip_re in re_list:
             if ip_re.search(rule.src) or ip_re.search(rule.dest):
-                extracted_ruleset.append(rule)
+                if rule not in extracted_ruleset:
+                    extracted_ruleset.append(rule)
 
     return extracted_ruleset
 
