@@ -5,6 +5,8 @@ Small utilities for formatting
 * csv_rule_parser.py - Filters Ruleset based on IP addresses for F5 firewalls
 * ip_zero_remover.py - Removes prefixed 0 in IP address formats
 * ms17_010_checker.py - Checks for vulnerable systems on given ranges for MS17-010. Requires responder to be installed on the system
+* log_analyzer.conf - Configuration for 'log_analyzer.py'
+* log_analyzer.py - Python script to analyze logs for presence of unwanted data. Data Regex can be defined in 'log_analyzer.conf'.
 * network_sniffer.py - Script to monitor basic protocols travelling between the source and destination over a network
 * nmap_live_host.py - Discovers live hosts from Nmap XML output
 * nmap_to_csv.py - Converts nmap xml to csv format
