@@ -11,7 +11,7 @@ Creates nmap xml output to sqlite database
 """
 
 from xml.dom.minidom import *
-import sqlite3, sys, optparse
+import sqlite3, sys, optparse, json, re
 
 
 def readXMLFile(inputfilename):
@@ -48,37 +48,13 @@ def parseXMLFile(DOMTree):
 
 
 def write_to_json(portscan_dict = {}, project_name = ""):
-    conn = sqlite3.connect(project_name+".db")
-    conn.execute('''
-        CREATE TABLE IF NOT EXISTS port_scan
-        (
-            ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-            HOST TEXT,
-            PROTOCOL TEXT,
-            PORT TEXT,
-            SERVICE TEXT
-        );
-    ''')
-    counter = 1
-    for ip_addr in portscan_dict.keys():
-        for port in portscan_dict[ip_addr]:
-            protocol, port_num, service = port
-            insert_statement = "INSERT INTO port_scan (HOST, PROTOCOL, PORT, SERVICE) VALUES('"
-            insert_statement += ip_addr + "','"
-            insert_statement += protocol + "','"
-            insert_statement += port_num + "','"
-            insert_statement += service + "');"
-            try:
-                conn.execute(insert_statement)
-            except Exception, e:
-                print e.args
-                break
-            if counter % 100 == 0:
-                conn.commit()
-            print "[+] Inserted", counter, "record(s)\r",
-            counter += 1
-    conn.commit()
-    conn.close()
+
+    json_filename = project_name + ".json"
+
+    with open(json_filename, 'w') as json_file:
+        json.dump(portscan_dict, json_file)
+
+    print "[+] JSON File '%s' written."%(json_filename)
 
 
 def main():
@@ -92,7 +68,7 @@ def main():
         sys.exit(1)
     else:
         port_scan = parseXMLFile(readXMLFile(options.nmap_xml))
-        write_to_database(port_scan, options.project_name)
+        write_to_json(port_scan, options.project_name)
 
 
 if __name__ == "__main__":
