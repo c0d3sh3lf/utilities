@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import re, sys, optparse, csv
+import re, sys, optparse, csv, collections
 
 def generate_table(list_data = []):
     html_data = "<table><tr><th>IP Address</th><th>Port</th><th>DNS Name</th></tr>"
@@ -15,7 +15,7 @@ def generate_table(list_data = []):
 def sort_ascending(issue_dict = {}):
     sorted_list = []
     for issue_name in issue_dict.keys():
-        sorted_list.append({"id": issue_dict[issue_name]["issue_id"], "cvss": issue_dict[issue_name]["cvss"]})
+        sorted_list.append({"id": issue_dict[issue_name]["issue_id"], "cvss": issue_dict[issue_name]["cvss"], "hosts":issue_dict[issue_name]["affected_systems"]})
 
     #Sort IDs
     for i in range(0, len(sorted_list) - 2):
@@ -29,14 +29,24 @@ def sort_ascending(issue_dict = {}):
 
     critical = 0
     critical_list = []
+    critical_hosts = []
+    critical_host_count = 0
     high = 0
     high_list = []
+    high_hosts = []
+    high_host_count = 0
     medium = 0
     medium_list = []
+    medium_hosts = []
+    medium_host_count = 0
     low = 0
     low_list = []
+    low_hosts = []
+    low_host_count = 0
     info = 0
     info_list = []
+    info_hosts = []
+    info_host_count = 0
 
     for element in sorted_list:
         cvss_score = element["cvss"]
@@ -44,24 +54,39 @@ def sort_ascending(issue_dict = {}):
         if cvss_score >= 9.0:
             critical += 1
             critical_list.append(element)
+            for (ip_address, port, dns) in element["hosts"]:
+                critical_hosts.append(ip_address)
+            critical_host_count = len(list(set(critical_hosts)))
         elif cvss_score < 9.0 and cvss_score >= 7.0:
             high += 1
             high_list.append(element)
+            for (ip_address, port, dns) in element["hosts"]:
+                high_hosts.append(ip_address)
+            high_host_count = len(list(set(high_hosts)))
         elif cvss_score < 7.0 and cvss_score >= 4.0:
             medium += 1
             medium_list.append(element)
+            for (ip_address, port, dns) in element["hosts"]:
+                medium_hosts.append(ip_address)
+            medium_host_count = len(list(set(medium_hosts)))
         elif cvss_score < 4.0 and cvss_score > 0.0:
             low += 1
             low_list.append(element)
+            for (ip_address, port, dns) in element["hosts"]:
+                low_hosts.append(ip_address)
+            low_host_count = len(list(set(low_hosts)))
         else:
             info += 1
             info_list.append(element)
+            for (ip_address, port, dns) in element["hosts"]:
+                info_hosts.append(ip_address)
+            info_host_count = len(list(set(info_hosts)))
 
-    details_dict["critical"] = {"count": critical, "issues": critical_list}
-    details_dict["high"] = {"count": high, "issues": high_list}
-    details_dict["medium"] = {"count": medium, "issues": medium_list}
-    details_dict["low"] = {"count": low, "issues": low_list}
-    details_dict["info"] = {"count": info, "issues": info_list}
+    details_dict["critical"] = {"count": critical, "issues": critical_list, "host_count": critical_host_count}
+    details_dict["high"] = {"count": high, "issues": high_list, "host_count": high_host_count}
+    details_dict["medium"] = {"count": medium, "issues": medium_list, "host_count": medium_host_count}
+    details_dict["low"] = {"count": low, "issues": low_list, "host_count": low_host_count}
+    details_dict["info"] = {"count": info, "issues": info_list, "host_count": info_host_count}
 
     return details_dict
 
@@ -213,12 +238,18 @@ def write_to_html(issue_dict = {}, output_filename="output.html"):
     low_count = details["low"]["count"]
     info_count = details["info"]["count"]
 
-    html_data += "<h2>Tabular Summary</h2><table><tr><th>Severity</th><th>Count</th></tr>"
-    html_data += "<tr><td><span class='critical'>Critical</span></td><td>" + str(critical_count) + "</td></tr>"
-    html_data += "<tr><td><span class='high'>High</span></td><td>" + str(high_count) + "</td></tr>"
-    html_data += "<tr><td><span class='medium'>Medium</span></td><td>" + str(medium_count) + "</td></tr>"
-    html_data += "<tr><td><span class='low'>Low</span></td><td>" + str(low_count) + "</td></tr>"
-    html_data += "<tr><td><span class='none'>Informational</span></td><td>" + str(info_count) + "</td></tr>"
+    critical_host_count = details["critical"]["host_count"]
+    high_host_count = details["high"]["host_count"]
+    medium_host_count = details["medium"]["host_count"]
+    low_host_count = details["low"]["host_count"]
+    info_host_count = details["info"]["host_count"]
+
+    html_data += "<h2>Tabular Summary</h2><table><tr><th>Severity</th><th>Count</th><th>Unique Affected Hosts</th></tr>"
+    html_data += "<tr><td><span class='critical'>Critical</span></td><td>" + str(critical_count) + "</td><td>" + str(critical_host_count) + "</td></tr>"
+    html_data += "<tr><td><span class='high'>High</span></td><td>" + str(high_count) + "</td><td>" + str(high_host_count) + "</td></tr>"
+    html_data += "<tr><td><span class='medium'>Medium</span></td><td>" + str(medium_count) + "</td><td>" + str(medium_host_count) + "</td></tr>"
+    html_data += "<tr><td><span class='low'>Low</span></td><td>" + str(low_count) + "</td><td>" + str(low_host_count) + "</td></tr>"
+    html_data += "<tr><td><span class='none'>Informational</span></td><td>" + str(info_count) + "</td><td>" + str(info_host_count) + "</td></tr>"
     html_data += "</table>"
 
     critical_list = details["critical"]["issues"]
