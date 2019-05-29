@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import re, sys, optparse, csv, collections
+import re, sys, optparse, csv
 
 def generate_table(list_data = []):
     html_data = "<table><tr><th>IP Address</th><th>Port</th><th>DNS Name</th></tr>"
