@@ -3,6 +3,7 @@ Small utilities for formatting
 
 * api_header_check.py - Checks for necessary headers in OpenAPI implementation using server response stored in the file
 * csv_rule_parser.py - Filters Ruleset based on IP addresses for F5 firewalls
+* get_ip_from_domain.py - Script to get the IP addresses for list of domain names
 * git_search.py - Searches github based on keywords and generates output in HTML
 * ip_zero_remover.py - Removes prefixed 0 in IP address formats
 * ms17_010_checker.py - Checks for vulnerable systems on given ranges for MS17-010. Requires responder to be installed on the system
