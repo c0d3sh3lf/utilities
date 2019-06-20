@@ -15,6 +15,7 @@ Small utilities for formatting
 * nmap_to_json.py - Converts nmap xml to json format
 * nmap_to_sqlite.py - Stores nmap xml into SQLite3 DB format
 * sha256_file.py - Calculates SHA256 hash of all files present in a parent folder and its subfolder
+* ssllabs_json_to_csv.py - Converts the json output of ssllabs-scan to csv file
 * sslscan_parse_output.py - Output parser for SSLScan Output (Requires SSL Scan to be installed / present in the working directory)
 * tripwire_compliance_csv_parser.py - Output parser for Tripwire Compliance CSV report. Output in HTML format
 * tripwire_csv_parser.py - Output parser for Tripwire VA CSV files. Output in HTML format
