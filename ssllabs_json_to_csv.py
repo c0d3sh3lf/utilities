@@ -21,7 +21,7 @@ def main():
     parser = optparse.OptionParser("Script to analyse ssllabs/ssllabs-scan json output.\nNote: This script does not support flattened json output.")
     parser.add_option("-f", "--filename", dest="filename", help="JSON file output of the ssllabs-scan script.")
 
-    (args, options) = parser.parse_args()
+    (options, args) = parser.parse_args()
 
     if not options.filename:
         print("[-] Filename is required.")
@@ -40,13 +40,13 @@ def main():
         print "\rProcessing", str(i+1), "of", total_count,
         if json_data["status"][i] == "READY":
             host = json_data["host"][i]
-            try:
-                grade = output["grade"]
-            except KeyError:
-                grade = "NA"
             hasWarnings = "No"
             try:
                 output = json_data["endpoints"][i][0]
+                 try:
+                    grade = output["grade"]
+                except KeyError:
+                    grade = "NA"
                 try:
                     cert_exp = get_time(output["details"]["cert"]["notAfter"])
                 except KeyError:
@@ -126,6 +126,7 @@ def main():
                     tls13 = "NA"
             except KeyError:
                 cert_exp = ""
+                grade = ""
                 forward_secracy = ""
                 heartbeat = ""
                 beast = ""
