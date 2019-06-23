@@ -43,7 +43,7 @@ def main():
             hasWarnings = "No"
             try:
                 output = json_data["endpoints"][i][0]
-                 try:
+                try:
                     grade = output["grade"]
                 except KeyError:
                     grade = "NA"
