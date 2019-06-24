@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import pandas as pd
-import time, optparse, sys
+import time, optparse, sys, re
 
 
 def get_time(epoch_time=""):
@@ -31,10 +31,13 @@ def main():
     filename = options.filename
     json_data = pd.read_json(filename)
 
-    csv_data = "Sr. No., Host, Grade, Has Warnings, Certificate Expiry, Forward Secracy, Heartbeat Ext, BEAST, DROWN, Heartbleed, FREAK, OpenSSL CCS, OpenSSL LuckyMinus20, POODLE, POODLE TLS, TLS 1.3, TLS 1.2, TLS 1.1, TLS 1.0, SSL 3.0, SSL 2.0\n"
+    csv_data = "Sr. No., Host, Grade, Has Warnings, Certificate Expiry, Forward Secracy, Heartbeat Ext, BEAST, DROWN, Heartbleed, FREAK, OpenSSL CCS, OpenSSL LuckyMinus20, POODLE, POODLE TLS, TLS 1.3, TLS 1.2, TLS 1.1, TLS 1.0, SSL 3.0, SSL 2.0, HSTS, 3DES, RC4, RSA\n"
 
 
     total_count = len(json_data["host"])
+
+    des_re = re.compile(r"3DES")
+    rsa_re = re.compile(r"RSA")
 
     for i in range(0, len(json_data["host"])):
         print "\rProcessing", str(i+1), "of", total_count,
@@ -124,6 +127,43 @@ def main():
                     tls11 = "NA"
                     tls12 = "NA"
                     tls13 = "NA"
+                try:
+                    if output["hstsPolicy"]["status"] == "absent":
+                        hsts_policy = "No"
+                    else:
+                        hsts_policy = "Yes"
+                except KeyError:
+                    hsts_policy = "NA"
+                try:
+                    cipher_suites = output["suites"]["list"]
+                    for suite in cipher_suites:
+                        try:
+                            if des_re.search(suite["name"]):
+                                des = "Yes"
+                                break
+                            else:
+                                des = "No"
+                        except KeyError:
+                            des = "NA"
+                    for suite in cipher_suites:
+                        try:
+                            if rsa_re.search(suite["name"]):
+                                rsa = "Yes"
+                                break
+                            else:
+                                rsa = "No"
+                        except KeyError:
+                            rsa = "NA"
+                except KeyError:
+                    des = "NA"
+                    rsa = "NA"
+                try:
+                    if output["supportsRc4"] == "false":
+                        rc4 = "No"
+                    else:
+                        rc4 = "Yes"
+                except KeyError:
+                    rc4 = "NA"
             except KeyError:
                 cert_exp = ""
                 grade = ""
@@ -144,7 +184,11 @@ def main():
                 tls11 = ""
                 tls12 = ""
                 tls13 = ""
-            csv_data += str(i+1) + "," + host + "," + grade + "," +  hasWarnings + "," + cert_exp + "," + forward_secracy + "," + heartbeat + "," + beast + "," + drwon + "," + heartbleed + "," + freak + "," + openssl_ccs + "," + lm20 + "," + poodle + "," + poodle_tls + "," + tls13 + "," + tls12 + "," + tls11 + "," + tls10 + "," + ssl3 + "," + ssl2 + "\n"
+                hsts_policy = ""
+                des = ""
+                rsa = ""
+                rc4 = ""
+            csv_data += str(i+1) + "," + host + "," + grade + "," +  hasWarnings + "," + cert_exp + "," + forward_secracy + "," + heartbeat + "," + beast + "," + drwon + "," + heartbleed + "," + freak + "," + openssl_ccs + "," + lm20 + "," + poodle + "," + poodle_tls + "," + tls13 + "," + tls12 + "," + tls11 + "," + tls10 + "," + ssl3 + "," + ssl2 + "," + hsts_policy +  "," + des + "," + rc4 + "," + rsa  + "\n"
             status = "READY"
 
         else:
@@ -169,7 +213,11 @@ def main():
             tls11 = ""
             tls12 = ""
             tls13 = ""
-            csv_data += str(i+1) + "," + host + "," + grade + "," +  hasWarnings + "," + cert_exp + "," + forward_secracy + "," + heartbeat + "," + beast + "," + drwon + "," + heartbleed + "," + freak + "," + openssl_ccs + "," + lm20 + "," + poodle + "," + poodle_tls + "," + tls13 + "," + tls12 + "," + tls11 + "," + tls10 + "," + ssl3 + "," + ssl2 + "\n"
+            hsts_policy = ""
+            des = ""
+            rsa = ""
+            rc4 = ""
+            csv_data += str(i+1) + "," + host + "," + grade + "," +  hasWarnings + "," + cert_exp + "," + forward_secracy + "," + heartbeat + "," + beast + "," + drwon + "," + heartbleed + "," + freak + "," + openssl_ccs + "," + lm20 + "," + poodle + "," + poodle_tls + "," + tls13 + "," + tls12 + "," + tls11 + "," + tls10 + "," + ssl3 + "," + ssl2 + "," + hsts_policy +  "," + des + "," + rc4 + "," + rsa  + "\n"
 
 
     print "\nAll records processed. Writing to CSV."
