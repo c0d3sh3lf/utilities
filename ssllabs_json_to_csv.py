@@ -135,7 +135,10 @@ def main():
                 except KeyError:
                     hsts_policy = "NA"
                 try:
-                    cipher_suites = output["details"]["suites"]["list"]
+                    if type(output["details"]["suites"]["list"]) == type([]):
+                        cipher_suites = output["details"]["suites"][0]["list"]
+                    else:
+                        cipher_suites = output["details"]["suites"]["list"]
                     for suite in cipher_suites:
                         try:
                             if des_re.search(suite["name"]):
