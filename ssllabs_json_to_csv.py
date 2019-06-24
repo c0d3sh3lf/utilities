@@ -128,14 +128,14 @@ def main():
                     tls12 = "NA"
                     tls13 = "NA"
                 try:
-                    if output["hstsPolicy"]["status"] == "absent":
+                    if output["details"]["hstsPolicy"]["status"] == "absent":
                         hsts_policy = "No"
                     else:
                         hsts_policy = "Yes"
                 except KeyError:
                     hsts_policy = "NA"
                 try:
-                    cipher_suites = output["suites"]["list"]
+                    cipher_suites = output["details"]["suites"]["list"]
                     for suite in cipher_suites:
                         try:
                             if des_re.search(suite["name"]):
@@ -158,10 +158,7 @@ def main():
                     des = "NA"
                     rsa = "NA"
                 try:
-                    if output["supportsRc4"] == "false":
-                        rc4 = "No"
-                    else:
-                        rc4 = "Yes"
+                    rc4 = toYN(output["details"]["supportsRc4"])
                 except KeyError:
                     rc4 = "NA"
             except KeyError:
