@@ -5,6 +5,7 @@ Small utilities for formatting
 * csv_rule_parser.py - Filters Ruleset based on IP addresses for F5 firewalls
 * get_ip_from_domain.py - Script to get the IP addresses for list of domain names
 * git_search.py - Searches github based on keywords and generates output in HTML
+* hic_sql_v2.py - Performs analysis of SEP Host Integrity Check CSV output and generates a HTML report
 * ip_zero_remover.py - Removes prefixed 0 in IP address formats
 * ms17_010_checker.py - Checks for vulnerable systems on given ranges for MS17-010. Requires responder to be installed on the system
 * log_analyzer.conf - Configuration for 'log_analyzer.py'
