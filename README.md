@@ -23,3 +23,4 @@ Small utilities for formatting
 * tripwire_compliance_csv_parser.py - Output parser for Tripwire Compliance CSV report. Output in HTML format
 * tripwire_csv_parser.py - Output parser for Tripwire VA CSV files. Output in HTML format
 * udp_host_discovery.py - Host discovery script using UDP protocol
+* webpage_scr.py - Captures screenshot of webpages from a list of URLs. Requires chrome driver (https://chromedriver.chromium.org/downloads) and selenium (https://pypi.org/project/selenium/) to be installed on the system
