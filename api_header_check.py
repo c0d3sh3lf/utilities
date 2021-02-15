@@ -1,4 +1,5 @@
-import re, sys
+#!/usr/bin/python
+import re, sys, platform
 
 hsts_re = re.compile(r"^Strict\-Transport\-Security")
 content_type_re = re.compile(r"^X\-Content\-Type\-Options\:\snosniff")
@@ -44,37 +45,51 @@ for line in response:
     if xpoweredby_re.match(line):
         xpoweredby = True
 
-    if cache_control.match(line) and not cache_control:
+    if cache_control_re.match(line) and not cache_control:
         cache_control = True
 
 
+output = ""
+current_os = platform.system()
+
+# Output colors
+FONT_RED = "\033[91m"
+FONT_GREEN = "\033[92m"
+FONT_END = " \033[0m"
 
 if not hsts:
-    print "[-] HSTS not enabled"
+    output = "[-] HSTS not enabled" if current_os == 'Windows'  else FONT_RED + "[-] HSTS not enabled" + FONT_END
 else:
-    print "[+] HSTS - Success"
+    output =  "[+] HSTS - Success" if current_os == "Windows" else FONT_GREEN + "[+] HSTS - Success" + FONT_END
+print output
     
 if not content_type:
-    print "[-] Content-Type-Options not enabled"
+    output = "[-] Content-Type-Options not enabled" if current_os == 'Windows' else FONT_RED + "[-] Content-Type-Options not enabled" + FONT_END
 else:
-    print "[+] Content-Type-Options - Success"
+    output = "[+] Content-Type-Options - Success" if current_os == 'Windows' else FONT_GREEN + "[+] Content-Type-Options - Success" + FONT_END
+print output
 
 if not x_frame_options:
-    print "[-] X-Frame-Options not enabled"
+    output = "[-] X-Frame-Options not enabled" if current_os == 'Windows' else FONT_RED + "[-] X-Frame-Options not enabled" + FONT_END
 else:
-    print "[+] X-Frame-Options - Success"
+    output = "[+] X-Frame-Options - Success" if current_os == 'Windows' else FONT_GREEN + "[+] X-Frame-Options - Success" + FONT_END
+print output
 
 if not csp:
-    print "[-] CSP not enabled"
+    output = "[-] CSP not enabled" if current_os == 'Windows' else FONT_RED + "[-] CSP not enabled" + FONT_END
 else:
-    print "[+] CSP - Success"
+    output = "[+] CSP - Success" if current_os == 'Windows' else FONT_GREEN + "[+] CSP - Success" + FONT_END
+print output
     
 if not cache_control:
-    print "[-] Cache-Control not implemented properly"
+    output =  "[-] Cache-Control not implemented properly" if current_os == 'Windows' else FONT_RED + "[-] Cache-Control not implemented properly" + FONT_END
 else:
-    print "[+] Cache-Control - Success"
+    output = "[+] Cache-Control - Success" if current_os == 'Windows' else FONT_GREEN + "[+] Cache-Control - Success" + FONT_END
+print output
     
 if server or asp or xpoweredby:
-    print "[-] Fingerprinting headers enabled"
+    output = "[-] Fingerprinting headers enabled" if current_os == 'Windows' else FONT_RED + "[-] Fingerprinting headers enabled" + FONT_END
 else:
-    print "[+] Fingerprinting Headers - Success"
+    output = "[+] Fingerprinting Headers - Success" if current_os == 'Windows' else FONT_GREEN + "[+] Fingerprinting Headers - Success" + FONT_END
+print output
+print ""
