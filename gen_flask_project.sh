@@ -31,6 +31,8 @@ echo "    && apk add --no-cache mariadb-dev freetype-dev jpeg-dev zlib-dev libjp
 echo "RUN pip install --upgrade pip && pip install -r requirements.txt" >> Dockerfile
 echo "RUN apk del build-deps" >> Dockerfile
 echo "ADD ./ /app/" >> Dockerfile
+echo "EXPOSE 5000" >> Dockerfile
+echo "ENTRYPOINT python /app/app.py" >> Dockerfile
 
 # Create a docker-compose file
 echo "version: \"3\"" > docker-compose.yml
@@ -53,4 +55,4 @@ echo "def index():" >> app.py
 echo "  return \"This app works!\"" >> app.py
 echo "" >> app.py
 echo "if __name__ == \"__main__\":" >> app.py
-echo "  app.run(debug=True)" >> app.py
+echo "  app.run(debug=True, host=\"0.0.0.0\")" >> app.py
