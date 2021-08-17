@@ -6,6 +6,7 @@ Small utilities for formatting
 * csv_rule_parser.py - Filters Ruleset based on IP addresses for F5 firewalls
 * cve_extract.conf - Configuration File for cve_extract.py
 * cve_extract.py - Script to get the CVE details for the listed technologies in configuration file for past 3 months (can be changed in the script).
+* gen_flask_project.sh - Create Empty Python Flask Project
 * get_ip_from_domain.py - Script to get the IP addresses for list of domain names
 * git_search.py - Searches github based on keywords and generates output in HTML
 * hic_sql_v2.py - Performs analysis of SEP Host Integrity Check CSV output and generates a HTML report
