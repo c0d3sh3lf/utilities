@@ -30,13 +30,7 @@ pipeline {
                     sleep(30)
                     timeout(time: 1, unit:'MINUTES') {
                         def qg = waitForQualityGate()
-                        if (qg.status != 'OK') {
-                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
-                            // sonarBadge.setStatus('QG Failed')
-                            // sonarBadge.setColor('red')
-                        }
-                        // sonarBadge.setStatus('QG Passed')
-                        // sonarBadge.setColor('brightgreen')
+                        echo qg.status
                     }
                 }
                 echo "Code Review Completed"
