@@ -19,7 +19,7 @@ pipeline {
                 echo "Starting code review"
                 script {
                     // sonarBadge.setStatus('running')
-                    withCredentials([secretText(credentialsId: 'sonar-utilities-key', secretVariable: 'sonar-util-secret')])
+                    withCredentials([string(credentialsId: 'sonar-utilities-key', variable: 'sonar-util-secret')])
                     withSonarQubeEnv() {
                         sh "$scannerHome/bin/sonar-scanner \
                         -Dsonar.projectKey=Utilities \
