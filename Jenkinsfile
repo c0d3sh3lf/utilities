@@ -19,19 +19,20 @@ pipeline {
                 echo "Starting code review"
                 script {
                     // sonarBadge.setStatus('running')
-                    withCredentials([string(credentialsId: 'sonar-utilities-key', variable: 'sonar-util-secret')])
-                    withSonarQubeEnv() {
-                        sh "$scannerHome/bin/sonar-scanner \
-                        -Dsonar.projectKey=Utilities \
-                        -Dsonar.host.url=http://192.168.4.2:9000 \
-                        -Dsonar.login=${sonar-util-secret} \
-                        -Dsonar.sources=/var/jenkins_home/workspace/Utilities \
-                        -Dsonar.scm.provider=git"
-                    }
-                    sleep(30)
-                    timeout(time: 1, unit:'MINUTES') {
-                        def qg = waitForQualityGate()
-                        echo qg.status
+                    withCredentials([string(credentialsId: 'sonar-utilities-key', variable: 'sonar-util-secret')]){
+                        withSonarQubeEnv() {
+                            sh "$scannerHome/bin/sonar-scanner \
+                            -Dsonar.projectKey=Utilities \
+                            -Dsonar.host.url=http://192.168.4.2:9000 \
+                            -Dsonar.login=${sonar-util-secret} \
+                            -Dsonar.sources=/var/jenkins_home/workspace/Utilities \
+                            -Dsonar.scm.provider=git"
+                        }
+                        sleep(30)
+                        timeout(time: 1, unit:'MINUTES') {
+                            def qg = waitForQualityGate()
+                            echo qg.status
+                        }
                     }
                 }
                 echo "Code Review Completed"
