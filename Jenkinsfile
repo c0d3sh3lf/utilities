@@ -19,11 +19,12 @@ pipeline {
                 echo "Starting code review"
                 script {
                     // sonarBadge.setStatus('running')
+                    withCredentials([secretText(credentialsId: 'sonar-utilities-key', secretVariable: 'sonar-util-secret')])
                     withSonarQubeEnv() {
                         sh "$scannerHome/bin/sonar-scanner \
                         -Dsonar.projectKey=Utilities \
                         -Dsonar.host.url=http://192.168.4.2:9000 \
-                        -Dsonar.login=f2de71bb979a9fa0a6b2b057a1ab34044bc552a3 \
+                        -Dsonar.login=${sonar-util-secret} \
                         -Dsonar.sources=/var/jenkins_home/workspace/Utilities \
                         -Dsonar.scm.provider=git"
                     }
