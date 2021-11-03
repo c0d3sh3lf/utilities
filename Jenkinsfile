@@ -24,7 +24,7 @@ pipeline {
                         -Dsonar.projectKey=Utilities \
                         -Dsonar.host.url=http://192.168.4.2:9000 \
                         -Dsonar.login=f2de71bb979a9fa0a6b2b057a1ab34044bc552a3 \
-                        -Dsonar.sources=/var/jenkins_home/workspace/FlaskSample \
+                        -Dsonar.sources=/var/jenkins_home/workspace/Utilities \
                         -Dsonar.scm.provider=git"
                     }
                     sleep(30)
