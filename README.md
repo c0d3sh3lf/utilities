@@ -4,6 +4,7 @@ Small utilities for formatting
 
 - api_header_check.py - Checks for necessary headers in OpenAPI implementation using server response stored in the file
 - av_report_filter.py - Parses output from Symentec AV Report (xlsx) and sorts it into "Servers, ATMs and endpoints"
+- ccno_generator.py - Script to generate random visa, mastercard and rupay 16 digit card numbers.
 - csv_rule_parser.py - Filters Ruleset based on IP addresses for F5 firewalls
 - cve_extract.conf - Configuration File for cve_extract.py
 - cve_extract.py - Script to get the CVE details for the listed technologies in configuration file for past 3 months (can be changed in the script).
